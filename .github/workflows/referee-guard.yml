@@ -1,0 +1,39 @@
+name: referee-guard
+
+# pull_request_target runs this file as it exists on main, so a PR cannot edit the guard to
+# disable it. It only diffs file names and never executes code from the PR.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+jobs:
+  referee-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
+      - name: Block edits to protected paths
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          PR: ${{ github.event.pull_request.number }}
+          APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'referee-change') }}
+        run: |
+          git fetch --no-tags origin "pull/$PR/head:pr-head"
+          touched=$(git diff --name-only "$BASE"...pr-head | grep -E -f .github/protected-paths.txt || true)
+          if [ -z "$touched" ]; then
+            echo "No protected paths touched."
+            exit 0
+          fi
+          echo "Protected paths touched:"
+          echo "$touched"
+          if [ "$APPROVED" = "true" ]; then
+            echo "Allowed: the owner applied the referee-change label."
+            exit 0
+          fi
+          echo "::error::This PR edits protected paths (see AGENTS.md §3). Only the owner can allow it, with the referee-change label."
+          exit 1

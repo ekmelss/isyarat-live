@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync
+      - run: uv run pytest -q
+
+      - name: Referee — score changed models
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [ ! -f data/features/static.csv ]; then
+            echo "No data/features/static.csv yet: nothing to score." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if git cat-file -e "$BASE" 2>/dev/null; then
+            models=$(git diff --name-only "$BASE" HEAD -- 'models/*.py' | grep -v '__init__' || true)
+          else
+            models=$(ls models/*.py 2>/dev/null || true)
+          fi
+          # A data change re-scores every model.
+          if git cat-file -e "$BASE" 2>/dev/null && git diff --quiet "$BASE" HEAD -- data/features; then :; else
+            models=$(ls models/*.py 2>/dev/null | grep -v '__init__' || true)
+          fi
+          if [ -z "$models" ]; then
+            echo "No model files changed: nothing to score." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          for m in $models; do
+            [ -f "$m" ] || continue
+            uv run python -m eval.run "$m" --summary "$GITHUB_STEP_SUMMARY"
+          done

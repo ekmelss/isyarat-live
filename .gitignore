@@ -1,0 +1,13 @@
+data/raw/
+results/
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+*.jpg
+*.jpeg
+*.png
+*.mp4
+*.zip
+!docs/**/*.png

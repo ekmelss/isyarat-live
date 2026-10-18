@@ -1,0 +1,29 @@
+[project]
+name = "isyarat-live"
+version = "0.1.0"
+description = "On-device recognition of Bahasa Isyarat Malaysia, built by AI agents"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scikit-learn",
+]
+
+[project.optional-dependencies]
+# Landmark extraction only. CI does not need it, because the extracted features are committed.
+extract = [
+    "mediapipe",
+    "opencv-python",
+    "pillow",
+]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["eval/tests", "tests"]
+pythonpath = ["."]

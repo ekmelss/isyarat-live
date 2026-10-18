@@ -1,0 +1,6 @@
+^eval/
+^\.github/
+^AGENTS\.md$
+^GEMINI\.md$
+^prompts/
+^docs/BRIEF\.md$
