@@ -12,7 +12,7 @@ and merges and writes no product code. Every agent session is logged in
 
 | | |
 |---|---|
-| [`AGENTS.md`](AGENTS.md) | The rules every agent follows |
+| [`AGENTS.md`](AGENTS.md) | The rules every agent follows. Antigravity CLI (`agy`) loads it automatically |
 | [`prompts/`](prompts/) | Role prompts: Planner, Builder, Reviewer |
 | [`docs/BRIEF.md`](docs/BRIEF.md) | What we're building and the verified facts |
 | [`docs/PLAN.md`](docs/PLAN.md) · [`docs/TASKS.md`](docs/TASKS.md) | The plan and the task queue |

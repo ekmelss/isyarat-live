@@ -2,7 +2,7 @@
 T-### — <title>
 
 ## Agent
-Tool + model (e.g. Gemini CLI · gemini-x.y-pro):
+Tool + model (e.g. Antigravity CLI · <model shown in /model>):
 Role: Builder / Planner
 
 ## What changed
