@@ -22,3 +22,13 @@ for the claim that the project was built by AI, so record human interventions to
 - Files: `docs/PLAN.md`, `docs/TASKS.md`, `docs/AI_LOG.md`.
 - Human interventions: none.
 - Problems / open questions: Visual verification by the human owner will be required between T-002 and T-004 to confirm the 5 signer labels across the 3,500 images before data is frozen.
+## 2026-10-19 · Antigravity CLI (Gemini 3.8 Flash High) · Planner · —
+- Did: Refined acceptance criteria in `docs/TASKS.md` for tasks T-001 through T-004 to explicitly specify dataset download targets (`--dataset raw` vs `--dataset crop`), thumbnail downscaling, range definition schema (`signer_ranges.yaml`), and per-signer contact sheet generation (`--by-signer`) for human verification prior to landmark extraction and data freeze. Confirmed T-001 is ready for the first Builder session.
+- Files: `docs/TASKS.md`, `docs/AI_LOG.md`.
+- Human interventions: none.
+- Problems / open questions: none. T-001 has no dependencies and is ready for a Builder.
+## 2026-10-19 · Antigravity CLI (Gemini 3.8 Flash High) · Planner · —
+- Did: Added task T-003 (Automated signer run proposal tool) to propose signer runs per word automatically via appearance clustering / change-point detection, generating draft `signer_ranges.yaml` with per-run confidence and review flags. Shifted subsequent tasks to T-004..T-008 and updated the dependency chain accordingly.
+- Files: `docs/TASKS.md`, `docs/AI_LOG.md`.
+- Human interventions: Owner requested inserting an automated signer run proposal task between contact sheet generation and annotation validation.
+- Problems / open questions: none. T-001 remains the first unblocked task for Builder sessions.
