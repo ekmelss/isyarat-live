@@ -39,3 +39,4 @@ def top_confidence(proba, classes, y_true):
     """Confidence and correctness of the argmax class, per sample."""
     top = proba.argmax(axis=1)
     return proba.max(axis=1), classes[top] == y_true
+# guard test
