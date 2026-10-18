@@ -48,13 +48,29 @@ Format:
   - MediaPipe landmark extraction.
   - Writing `data/features/static.csv`.
 
-### T-003 — Signer annotation schema, run mapping, and validator
+### T-003 — Automated signer run proposal tool
 - Status: todo
 - Depends on: T-002
 - Acceptance criteria:
-  - Signer annotation range definition schema established in `data/annotations/signer_ranges.yaml` (or CSV) mapping contiguous image index intervals per word to signers `S1`..`S5`.
-  - `tools/validate_signers.py` exists and is runnable via `uv run python -m tools.validate_signers <path_to_annotations.csv>` (and supports `--expand` from range definitions to the full 3,500-sample mapping).
-  - Validation checks that all 3,500 samples across the 10 words are mapped, exactly 5 signers are present, each signer signs all 10 words, and there are no duplicate or missing indices.
+  - `tools/propose_signer_runs.py` exists and is runnable via `uv run python -m tools.propose_signer_runs`.
+  - Analyzes image sequences for all 10 words to propose signer runs automatically (e.g. via clothing/torso/sleeve color clustering or sharp sequence change-point detection across the 350 frames per word).
+  - Emits draft `data/annotations/signer_ranges.yaml` containing proposed run intervals mapped to signer IDs (`S1`..`S5`), a confidence score (0.0 to 1.0) per run, and flags runs with low confidence or ambiguous transitions (`needs_human_check: true`).
+  - Incorporates known run anchor cues from `docs/BRIEF.md` §4 to bootstrap initial signer mappings.
+  - Prints a concise summary table indicating proposed runs, confidence scores, and items flagged for human verification.
+  - Unit tests in `tests/test_propose_runs.py` test run detection and YAML output formatting using synthetic mock frame sequences (e.g. solid-color blocks simulating distinct clothing).
+  - `uv run pytest` passes.
+- Out of scope:
+  - Manual verification on contact sheets (owner responsibility).
+  - Landmark extraction.
+  - Modifying `eval/`.
+
+### T-004 — Signer annotation schema, validator, and expansion
+- Status: todo
+- Depends on: T-003
+- Acceptance criteria:
+  - Signer annotation range definition schema established in `data/annotations/signer_ranges.yaml` mapping contiguous image index intervals per word to signers `S1`..`S5` (confirmed and corrected by owner after T-003).
+  - `tools/validate_signers.py` exists and is runnable via `uv run python -m tools.validate_signers <path_to_annotations.yaml>` with `--expand` flag to generate the full 3,500-sample mapping in `data/annotations/signers.csv`.
+  - Validation checks that all 3,500 samples across the 10 words are mapped, exactly 5 signers are present, each signer signs all 10 words, and there are no duplicate or missing indices or overlapping ranges.
   - Generates the 5 per-signer verification sheets using `tools/generate_contact_sheets.py --by-signer` for the human owner to inspect before freezing.
   - Unit tests in `tests/test_validate_signers.py` test valid mapping as well as failure modes (missing frame, unknown signer id, missing word, overlapping ranges).
   - `uv run pytest` passes.
@@ -62,9 +78,9 @@ Format:
   - Modifying `eval/`.
   - Feature extraction.
 
-### T-004 — MediaPipe landmark extraction pipeline
+### T-005 — MediaPipe landmark extraction pipeline
 - Status: todo
-- Depends on: T-003
+- Depends on: T-004
 - Acceptance criteria:
   - `tools/extract_landmarks.py` exists and is runnable via `uv run python -m tools.extract_landmarks`.
   - Reads verified signer labels from `data/annotations/signers.csv` to populate the `signer` column.
@@ -78,9 +94,9 @@ Format:
   - Landmark normalisation (wrist-centering, scale normalisation belongs in `models/<name>.py:build()`).
   - Running `eval.freeze` (owner action).
 
-### T-005 — Dataset validation against referee loader
+### T-006 — Dataset validation against referee loader
 - Status: todo
-- Depends on: T-004
+- Depends on: T-005
 - Acceptance criteria:
   - `tests/test_data_integrity.py` calls `eval.data.load("data/features/static.csv")` and asserts that the dataset loads without `DataError`.
   - Asserts that all 10 labels exist, >= 2 signers exist, all feature values are finite numbers, and no NaNs exist.
@@ -90,9 +106,9 @@ Format:
   - Running `eval.freeze` or modifying `eval/` (owner only via `referee-change`).
   - Training models.
 
-### T-006 — Baseline static sign model (Logistic Regression)
+### T-007 — Baseline static sign model (Logistic Regression)
 - Status: todo
-- Depends on: T-005
+- Depends on: T-006
 - Acceptance criteria:
   - `models/baseline_logreg.py` exists, exposes `build()` returning an unfitted scikit-learn Pipeline, and defines `DESCRIPTION`.
   - All feature normalisation (wrist-centering on landmark 0, scale normalisation by hand span) is encapsulated inside `build()`.
@@ -105,9 +121,9 @@ Format:
   - Any preprocessing or scaling outside of `build()`.
   - Touching files in `eval/`.
 
-### T-007 — Calibration analysis and confidence gating
+### T-008 — Calibration analysis and confidence gating
 - Status: todo
-- Depends on: T-006
+- Depends on: T-007
 - Acceptance criteria:
   - `tools/calibrate.py` exists and is runnable via `uv run python -m tools.calibrate models/baseline_logreg.py`.
   - Computes Expected Calibration Error (ECE) and evaluates accuracy vs coverage at varying confidence thresholds tau.

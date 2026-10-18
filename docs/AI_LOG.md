@@ -27,3 +27,8 @@ for the claim that the project was built by AI, so record human interventions to
 - Files: `docs/TASKS.md`, `docs/AI_LOG.md`.
 - Human interventions: none.
 - Problems / open questions: none. T-001 has no dependencies and is ready for a Builder.
+## 2026-10-19 · Antigravity CLI (Gemini 3.8 Flash High) · Planner · —
+- Did: Added task T-003 (Automated signer run proposal tool) to propose signer runs per word automatically via appearance clustering / change-point detection, generating draft `signer_ranges.yaml` with per-run confidence and review flags. Shifted subsequent tasks to T-004..T-008 and updated the dependency chain accordingly.
+- Files: `docs/TASKS.md`, `docs/AI_LOG.md`.
+- Human interventions: Owner requested inserting an automated signer run proposal task between contact sheet generation and annotation validation.
+- Problems / open questions: none. T-001 remains the first unblocked task for Builder sessions.
