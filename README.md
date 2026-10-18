@@ -12,7 +12,7 @@ and merges and writes no product code. Every agent session is logged in
 
 | | |
 |---|---|
-| [`AGENTS.md`](AGENTS.md) | The rules every agent follows |
+| [`AGENTS.md`](AGENTS.md) | The rules every agent follows. Antigravity CLI (`agy`) loads it automatically |
 | [`prompts/`](prompts/) | Role prompts: Planner, Builder, Reviewer |
 | [`docs/BRIEF.md`](docs/BRIEF.md) | What we're building and the verified facts |
 | [`docs/PLAN.md`](docs/PLAN.md) · [`docs/TASKS.md`](docs/TASKS.md) | The plan and the task queue |
@@ -22,7 +22,26 @@ The referee scores each model twice: **leave-one-signer-out** (the headline) and
 split** (the leaky comparison most papers report). The gap between them is one of the results.
 CI blocks any PR that edits the referee or the rules unless the owner approves it.
 
-## Running
+## Running the agent loop (owner)
+
+Agents run in [Antigravity CLI](https://antigravity.google/product/antigravity-cli) (`agy`). Each
+role is a slash command defined in `.agents/skills/`. **Start a fresh session for every role**,
+so no agent reviews its own work.
+
+| Step | Command | Then the owner… |
+|---|---|---|
+| Plan | `agy --model gemini-3.8-flash-high` → `/planner` | reads the plan PR and merges it |
+| Build | `agy --model gemini-3.8-flash-high` → `/builder` (or `/builder T-003`) | waits for CI |
+| Review | `agy --model claude-opus-4-6-thinking` → `/reviewer 12` | reads the verdict, merges or sends it back to a Builder |
+
+The Reviewer deliberately runs on a different model family than the Builder. Two models are less
+likely to share a blind spot than one model checking itself.
+
+Guard rails, in layers: `main` accepts only PRs with green `tests` + `referee-guard` checks; the
+guard blocks edits to protected paths without the owner's `referee-change` label; and the
+owner's `agy` settings deny merging, labelling, force-pushing and writing to protected paths.
+
+## Running the code
 
 ```
 uv sync
