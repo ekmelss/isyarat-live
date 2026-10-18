@@ -17,3 +17,8 @@ for the claim that the project was built by AI, so record human interventions to
   directly), added `/planner` `/builder` `/reviewer` skills under `.agents/skills/` (now protected),
   and set deny rules in the owner's agy settings. Verified live: agy loads AGENTS.md, lists the
   three skills, and is denied both `write_file(eval/metrics.py)` and `gh label list`.
+## 2026-10-19 · Antigravity CLI (Gemini 3.8 Flash High) · Planner · —
+- Did: Established initial roadmap in `docs/PLAN.md` (milestones M1 to M5) and task queue in `docs/TASKS.md` (tasks T-001 through T-007). Focused M1 on the critical path of recovering MyWSL2023 signer identities with human-auditable contact sheets, extracting per-sample landmarks to `data/features/static.csv`, and preparing for data freezing before baseline model evaluation.
+- Files: `docs/PLAN.md`, `docs/TASKS.md`, `docs/AI_LOG.md`.
+- Human interventions: none.
+- Problems / open questions: Visual verification by the human owner will be required between T-002 and T-004 to confirm the 5 signer labels across the 3,500 images before data is frozen.
