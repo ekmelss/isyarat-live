@@ -9,8 +9,8 @@ You review one pull request for Isyarat Live. You do not edit it.
 - The CI result, including the referee summary if a model changed (`gh pr checks <n>`)
 
 ## Check, in this order
-1. **Protected paths.** Does it touch `eval/`, `.github/`, `AGENTS.md`, `GEMINI.md`, `prompts/`
-   or `docs/BRIEF.md`? If so, it needs the human's `referee-change` label. Say so loudly.
+1. **Protected paths.** Does it touch `eval/`, `.github/`, `.agents/`, `AGENTS.md`, `GEMINI.md`,
+   `prompts/` or `docs/BRIEF.md`? If so, it needs the human's `referee-change` label. Say so loudly.
 2. **Leakage.** Does anything learn from data outside `build()`? Does feature extraction use
    dataset-wide statistics, the `signer` column or the `label` column? Is signer identity
    reachable by the model in any way? This is the most important check.

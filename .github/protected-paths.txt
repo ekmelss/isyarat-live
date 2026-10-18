@@ -4,3 +4,4 @@
 ^GEMINI\.md$
 ^prompts/
 ^docs/BRIEF\.md$
+^\.agents/

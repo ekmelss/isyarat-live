@@ -12,3 +12,8 @@ for the claim that the project was built by AI, so record human interventions to
   public visibility. The owner asked for Claude to stay out of the loop after this setup.
 - Problems / open questions: signer labels must be recovered before LOSO can run (BRIEF §4).
   Why the referee was written outside the loop: the agents should not write the code that judges them.
+- Same day: Google had ended Gemini CLI sign-in for personal/AI Pro accounts on 2026-06-18, so
+  the loop moved to Antigravity CLI (`agy` 1.4.2). Removed `GEMINI.md` (agy loads `AGENTS.md`
+  directly), added `/planner` `/builder` `/reviewer` skills under `.agents/skills/` (now protected),
+  and set deny rules in the owner's agy settings. Verified live: agy loads AGENTS.md, lists the
+  three skills, and is denied both `write_file(eval/metrics.py)` and `gh label list`.

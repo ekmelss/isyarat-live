@@ -29,7 +29,7 @@ Agents do not remember previous sessions. Everything that matters lives in these
 
 ## 3. Protected paths — do not edit
 
-`eval/` · `.github/` · `AGENTS.md` · `GEMINI.md` · `prompts/` · `docs/BRIEF.md`
+`eval/` · `.github/` · `.agents/` · `AGENTS.md` · `prompts/` · `docs/BRIEF.md`
 
 CI fails any PR that touches these unless the human owner applies the `referee-change` label.
 If you think one of them is wrong, explain why in `docs/REFEREE_REQUESTS.md` and stop. Do not
