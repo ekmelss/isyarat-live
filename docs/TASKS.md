@@ -21,7 +21,7 @@ Format:
 - Depends on: none
 - Acceptance criteria:
   - `tools/download_data.py` exists and is runnable via `uv run python -m tools.download_data`.
-  - Downloads MyWSL2023 raw data from Mendeley Data DOI `10.17632/zvk55p7ktd.1` into `data/raw/` (gitignored).
+  - Downloads MyWSL2023 dataset from Mendeley Data DOI `10.17632/zvk55p7ktd.1` into `data/raw/` (gitignored). Supports `--dataset raw` (default, 3.3 GB full frames) and `--dataset crop` (54 MB tight hand crops).
   - Verifies archive integrity and directory structure after download.
   - Supports a `--check` flag to verify local archive/extracted file integrity without re-downloading.
   - Unit tests in `tests/test_download.py` test URL handling, extraction logic, and checksum verification with mocks.
@@ -37,7 +37,8 @@ Format:
 - Depends on: T-001
 - Acceptance criteria:
   - `tools/generate_contact_sheets.py` exists and is runnable via `uv run python -m tools.generate_contact_sheets`.
-  - Generates HTML contact sheets in `data/raw/sheets/` (gitignored) for all 10 words, displaying thumbnails with image sequence numbers and run groupings.
+  - Generates HTML contact sheets in `data/raw/sheets/` (gitignored) for all 10 words, displaying lightweight downscaled thumbnails with image sequence numbers to identify signer runs.
+  - Supports a `--by-signer <annotations_csv>` flag to generate per-signer contact sheets (`signer_S1.html` .. `signer_S5.html`) once annotations exist.
   - Preserves face pixelation from raw images while making clothing/sleeves/hands clearly visible for human signer identification.
   - Unit tests in `tests/test_contact_sheets.py` test grid generation and HTML rendering using synthetic mock images.
   - `uv run pytest` passes.
@@ -47,14 +48,15 @@ Format:
   - MediaPipe landmark extraction.
   - Writing `data/features/static.csv`.
 
-### T-003 — Signer annotation schema and validator
+### T-003 — Signer annotation schema, run mapping, and validator
 - Status: todo
 - Depends on: T-002
 - Acceptance criteria:
-  - `tools/validate_signers.py` exists and is runnable via `uv run python -m tools.validate_signers <path_to_annotations.csv>`.
-  - Signer annotation file format defined (mapping `sample_id` / `(word, index)` to signer `S1`..`S5`).
+  - Signer annotation range definition schema established in `data/annotations/signer_ranges.yaml` (or CSV) mapping contiguous image index intervals per word to signers `S1`..`S5`.
+  - `tools/validate_signers.py` exists and is runnable via `uv run python -m tools.validate_signers <path_to_annotations.csv>` (and supports `--expand` from range definitions to the full 3,500-sample mapping).
   - Validation checks that all 3,500 samples across the 10 words are mapped, exactly 5 signers are present, each signer signs all 10 words, and there are no duplicate or missing indices.
-  - Unit tests in `tests/test_validate_signers.py` test valid mapping as well as failure modes (missing frame, unknown signer id, missing word).
+  - Generates the 5 per-signer verification sheets using `tools/generate_contact_sheets.py --by-signer` for the human owner to inspect before freezing.
+  - Unit tests in `tests/test_validate_signers.py` test valid mapping as well as failure modes (missing frame, unknown signer id, missing word, overlapping ranges).
   - `uv run pytest` passes.
 - Out of scope:
   - Modifying `eval/`.
@@ -65,6 +67,7 @@ Format:
 - Depends on: T-003
 - Acceptance criteria:
   - `tools/extract_landmarks.py` exists and is runnable via `uv run python -m tools.extract_landmarks`.
+  - Reads verified signer labels from `data/annotations/signers.csv` to populate the `signer` column.
   - Uses MediaPipe Hand Landmarker (`uv sync --extra extract`) to extract 21 landmarks (x, y, z) per detected hand.
   - Normalisation: raw landmark coordinates only, extracted strictly per-sample (no dataset-wide statistics).
   - Writes `data/features/static.csv` matching `eval/data.py` required columns (`sample_id`, `signer`, `label`, `f0`..`fN`).
