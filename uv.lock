@@ -138,6 +138,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "numpy" },
     { name = "pandas" },
+    { name = "pillow" },
     { name = "scikit-learn" },
 ]
 
@@ -159,6 +160,7 @@ requires-dist = [
     { name = "numpy" },
     { name = "opencv-python", marker = "extra == 'extract'" },
     { name = "pandas" },
+    { name = "pillow" },
     { name = "pillow", marker = "extra == 'extract'" },
     { name = "scikit-learn" },
 ]

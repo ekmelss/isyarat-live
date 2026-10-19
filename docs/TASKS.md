@@ -33,7 +33,7 @@ Format:
   - Committing any image or binary files.
 
 ### T-002 — Contact sheet generator for visual signer verification
-- Status: todo
+- Status: review
 - Depends on: T-001
 - Acceptance criteria:
   - `tools/generate_contact_sheets.py` exists and is runnable via `uv run python -m tools.generate_contact_sheets`.
