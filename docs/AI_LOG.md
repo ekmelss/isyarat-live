@@ -37,3 +37,9 @@ for the claim that the project was built by AI, so record human interventions to
 - Files: `tools/__init__.py`, `tools/download_data.py`, `tests/test_download.py`, `docs/TASKS.md`, `docs/AI_LOG.md`.
 - Human interventions: none.
 - Problems / open questions: none. All 36 tests pass.
+## 2026-10-19 · Antigravity CLI (Gemini 3.8 Flash High) · Builder · T-002
+- Did: Implemented `tools/generate_contact_sheets.py` to generate visual verification contact sheets for MyWSL2023. Added dataset discovery supporting both raw full frames and crop variants, downscaled JPEG thumbnail caching preserving aspect ratios and original face pixelation, standalone responsive HTML sheets for all 10 vocabulary words with sequence numbers, quick jump navigation, interactive lightbox modal with arrow-key frame stepping, and an index overview page (`index.html`). Implemented `--by-signer <annotations_csv>` flag to generate per-signer verification sheets (`signer_S1.html` .. `signer_S5.html`) grouping frames by word. Added `pillow` to dependencies in `pyproject.toml`. Added 23 unit tests in `tests/test_contact_sheets.py` covering thumbnail generation, caching, annotations parsing, HTML rendering, CLI execution, and git status sanity.
+- Files: `tools/generate_contact_sheets.py`, `tests/test_contact_sheets.py`, `pyproject.toml`, `uv.lock`, `docs/TASKS.md`, `docs/AI_LOG.md`.
+- Human interventions: none.
+- Problems / open questions: none. All 59 tests pass.
+
