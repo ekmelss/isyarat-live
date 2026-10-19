@@ -32,3 +32,8 @@ for the claim that the project was built by AI, so record human interventions to
 - Files: `docs/TASKS.md`, `docs/AI_LOG.md`.
 - Human interventions: Owner requested inserting an automated signer run proposal task between contact sheet generation and annotation validation.
 - Problems / open questions: none. T-001 remains the first unblocked task for Builder sessions.
+## 2026-10-19 · Antigravity CLI (Gemini 3.8 Flash High) · Builder · T-001
+- Did: Implemented `tools/download_data.py` to download and verify the MyWSL2023 dataset from Mendeley Data (DOI 10.17632/zvk55p7ktd.1). Supported `--dataset raw` (3.3 GB full frames) and `--dataset crop` (54 MB tight hand crops), automatic resolution via Mendeley API with direct URL fallbacks, resumable chunked downloads, archive validation with ZipFile.testzip(), safe extraction with zip-slip prevention, directory structure verification across all 10 words and 3,500 expected images, and `--check` mode. Added 20 unit tests in `tests/test_download.py` testing mock downloads, partial resume, archive verification, and CLI flags.
+- Files: `tools/__init__.py`, `tools/download_data.py`, `tests/test_download.py`, `docs/TASKS.md`, `docs/AI_LOG.md`.
+- Human interventions: none.
+- Problems / open questions: none. All 36 tests pass.

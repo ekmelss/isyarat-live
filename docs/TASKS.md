@@ -17,7 +17,7 @@ Format:
 <!-- Tasks go below this line. -->
 
 ### T-001 — Dataset download and verification helper
-- Status: todo
+- Status: review
 - Depends on: none
 - Acceptance criteria:
   - `tools/download_data.py` exists and is runnable via `uv run python -m tools.download_data`.
